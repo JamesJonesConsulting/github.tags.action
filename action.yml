@@ -27,7 +27,7 @@ runs:
     - id: github-tags
       shell: bash
       run: |
-        TAGS=( $(curl --silent "https://api.github.com/repos/Wordpress/Wordpress/tags" | jq '.[] | .name' | awk '/^"${{ inputs.github-filter-tags }}/' | head -n ${{ inputs.github-max-tags }}) )
+        TAGS=( $(curl --silent "https://api.github.com/repos/${{ inputs.github-repo }/tags" | jq '.[] | .name' | awk '/^"${{ inputs.github-filter-tags }}/' | head -n ${{ inputs.github-max-tags }}) )
         echo "tags=$(jq -s '{tags: .}' <<< "${TAGS[@]}" | jq -c .)" >> $GITHUB_OUTPUT
       # with:
       #   do_token: ${{ inputs.do_token }}
