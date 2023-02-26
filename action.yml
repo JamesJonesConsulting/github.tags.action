@@ -18,7 +18,7 @@ inputs:
 
 outputs:
   tags:
-    description: 'Data read from YAML file'
+    description: 'The tag list for the specified project'
     value: ${{ steps.github-tags.outputs.tags }}
 
 runs:
