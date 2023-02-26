@@ -29,11 +29,3 @@ runs:
       run: |
         TAGS=( $(curl --silent "https://api.github.com/repos/${{ inputs.github-repo }}/tags" | jq '.[] | .name' | awk '/^"${{ inputs.github-filter-tags }}/' | head -n ${{ inputs.github-max-tags }}) )
         echo "tags=$(jq -s '{tags: .}' <<< "${TAGS[@]}" | jq -c .)" >> $GITHUB_OUTPUT
-      # with:
-      #   do_token: ${{ inputs.do_token }}
-      #   do_token: ${{ inputs.do_cluster }}
-  # - name: deploy stack
-  #   uses: somelibrary/deploy@master
-  #   with:
-  #     version: ${{ inputs.version }}
-  #     namespace: ${{ inputs.namespace}}
