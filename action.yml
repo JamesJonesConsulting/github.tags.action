@@ -1,4 +1,4 @@
-name: doinit
+name: get-tag-list
 description: |
   Returns a JSON object containing an array of tags for the provided project
 
