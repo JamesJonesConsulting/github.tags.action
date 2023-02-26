@@ -1,0 +1,39 @@
+name: doinit
+description: |
+  Returns a JSON object containing an array of tags for the provided project
+
+# Were we can define the inputs that our action will accept
+inputs:
+  github-repo:
+    description: Github repo in the format 'owner/project'
+    required: true
+  github-max-tags:
+    description: The maximum tags returned (default is 1)
+    required: false
+    default: "1"
+  github-filter-tags:
+    description: The filter for tags (ex. 3 for version 3 only)
+    required: false
+    default: "."
+
+outputs:
+  tags:
+    description: 'Data read from YAML file'
+    value: ${{ steps.github-tags.outputs.tags }}
+
+runs:
+  using: "composite"
+  steps:
+    - id: github-tags
+      shell: bash
+      run: |
+        TAGS=( $(curl --silent "https://api.github.com/repos/Wordpress/Wordpress/tags" | jq '.[] | .name' | awk '/^"${{ inputs.github-filter-tags }}/' | head -n ${{ inputs.github-max-tags }}) )
+        echo "tags=$(jq -s '{tags: .}' <<< "${TAGS[@]}" | jq -c .)" >> $GITHUB_OUTPUT
+      # with:
+      #   do_token: ${{ inputs.do_token }}
+      #   do_token: ${{ inputs.do_cluster }}
+  # - name: deploy stack
+  #   uses: somelibrary/deploy@master
+  #   with:
+  #     version: ${{ inputs.version }}
+  #     namespace: ${{ inputs.namespace}}
